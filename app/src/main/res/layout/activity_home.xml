@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sharangirdhani.homework07.HomeActivity">
+
+    <LinearLayout
+        android:id="@+id/first_row"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:weightSum="1"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:id="@+id/tv_friendlabel"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_weight="0.27"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"/>
+
+        <ImageButton
+            android:id="@+id/imgBtnEdit"
+            android:layout_width="32dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.70"
+            android:background="@android:color/transparent"
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/edit_profile" />
+
+        <ImageButton
+            android:id="@+id/imgBtn_friends"
+            android:layout_width="43dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="false"
+            android:background="@android:color/transparent"
+            android:cropToPadding="false"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/friends_list" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvPostLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="12dp"
+        android:text="Posts"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_below="@+id/first_row"
+        android:layout_alignParentStart="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPosts"
+        android:layout_width="wrap_content"
+        android:layout_height="380dp"
+        android:layout_alignStart="@+id/tvPostLabel"
+        android:layout_below="@+id/tvPostLabel"
+        android:layout_marginTop="14dp"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/edtTxtNewPost"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/rvPosts"
+        android:layout_below="@+id/rvPosts"
+        android:ems="10"
+        android:hint="Write a post"
+        android:inputType="textPersonName" />
+
+    <ImageButton
+        android:id="@+id/imgBtnSendPost"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_alignBottom="@+id/edtTxtNewPost"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toEndOf="@+id/edtTxtNewPost"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/post" />
+</RelativeLayout>
