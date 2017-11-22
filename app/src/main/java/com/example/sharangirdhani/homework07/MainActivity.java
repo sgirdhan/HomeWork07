@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         actionBar.setCustomView(R.layout.custom_actionbar_login);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-
         buttonLogin = (Button) findViewById(R.id.buttonMainLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +67,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         });
 
         mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.google_web_client_ID))
                 .requestEmail()
+                .requestProfile()
                 .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d("hw7", "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -158,12 +159,39 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
+                        else {
+                            setupUserData(acct);
+                        }
                     }
                 });
     }
 
+    private void setupUserData(final GoogleSignInAccount acct) {
+        if (acct != null && FirebaseAuth.getInstance().getCurrentUser() != null) {
+            final String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.hasChild(user_id)) {
+                        String firstName = acct.getGivenName();
+                        String lastName = acct.getFamilyName();
+                        String email = acct.getEmail();
+
+                        User user = new User(user_id, firstName, lastName, email, "123123", null);
+                        FirebaseDatabase.getInstance().getReference("users").child(user_id).setValue(user);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+    public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser() != null){
             // Check if user is already in the database
             FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -181,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
+                    }
+                    else {
+                        firebaseAuth.signOut();
                     }
                 }
 
