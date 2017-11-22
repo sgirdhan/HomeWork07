@@ -46,7 +46,6 @@ public class ManageFriendsFragment extends Fragment implements ManageFriendsAdap
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         // Inflate the layout for this fragment
-        Toast.makeText(this.getContext(), "Manage Friend Fragment called", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.fragment_manage_friends, container, false);
 
         userList = mListener.getManageFriendsList();

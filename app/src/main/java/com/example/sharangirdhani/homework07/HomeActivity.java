@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity implements PostsAdapter.IPos
                 if(isValid) {
                     final DatabaseReference postId = firebaseDatabase.getReference("users").child(firebaseAuth.getCurrentUser().getUid()).child("posts").push();
                     edtNewPost.setText("");
-                    String currentTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+                    String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
                     Post newPost = new Post(postId.getKey(), firebaseAuth.getCurrentUser().getDisplayName(), currentTime, post, firebaseAuth.getCurrentUser().getUid());
                     postId.setValue(newPost);

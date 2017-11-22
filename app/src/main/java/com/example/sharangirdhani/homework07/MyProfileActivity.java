@@ -117,7 +117,9 @@ public class MyProfileActivity extends AppCompatActivity implements DatePickerDi
         edtLastName.setText(user.getLastName());
         edtEmail.setText(user.getEmail());
         chosenDate = user.getDob();
-        editTextDOB.setText(dateFormat.format(chosenDate));
+        if(chosenDate != null) {
+            editTextDOB.setText(dateFormat.format(chosenDate));
+        }
         edtEmail.setEnabled(false);
     }
 

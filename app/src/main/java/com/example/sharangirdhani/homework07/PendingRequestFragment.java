@@ -46,7 +46,6 @@ public class PendingRequestFragment extends Fragment implements PendingRequestAd
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        Toast.makeText(this.getContext(), "Pending Request Fragment called", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.fragment_pending_request, container, false);
 
         userList = mListener.getPendingRequestsUserList();

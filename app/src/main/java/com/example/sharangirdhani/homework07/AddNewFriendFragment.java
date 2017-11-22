@@ -39,7 +39,6 @@ public class AddNewFriendFragment extends Fragment implements AddNewFriendsAdapt
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        Toast.makeText(this.getContext(), "Add New Friend Fragment called", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.fragment_add_new_friend, container, false);
 
         userList = mListener.getAddFriendUserList();

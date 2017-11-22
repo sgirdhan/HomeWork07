@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by sharangirdhani on 11/20/17.
@@ -63,7 +64,9 @@ public class Post implements Serializable{
     }
 
     public String getPrettyTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("EST"));
+
         Date date = new Date(0);
         try {
             date = dateFormat.parse(created);
