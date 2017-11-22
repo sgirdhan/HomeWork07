@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HomeWork07</string>
+    <string name="app_name">My Social App</string>
     <string name="google_web_client_ID">1028178799159-55os4shjk1v00jt2free28pd99pi8kmf.apps.googleusercontent.com</string>
     <string name="buttonSignupLabel">Sign up</string>
     <string name="buttonCancelLabel">Cancel</string>

@@ -16,16 +16,18 @@ public class Post implements Serializable{
     private String username;
     private String created;
     private String postData;
+    private String userId;
 
     public Post() {
 
     }
 
-    public Post(String postId, String username, String created, String postData) {
+    public Post(String postId, String username, String created, String postData, String userId) {
         this.postId = postId;
         this.username = username;
         this.created = created;
         this.postData = postData;
+        this.userId = userId;
     }
 
     public String getPostId() {
@@ -70,6 +72,14 @@ public class Post implements Serializable{
         }
 
         PrettyTime p = new PrettyTime();
-        return p.format(new Date(date.getTime() - (5*60*60*1000)));
+        return p.format(new Date(date.getTime()));
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

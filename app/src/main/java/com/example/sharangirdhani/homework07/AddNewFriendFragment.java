@@ -4,33 +4,54 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddNewFriendFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
-public class AddNewFriendFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AddNewFriendFragment extends Fragment implements AddNewFriendsAdapter.IFriendAddInterface {
 
     private OnFragmentInteractionListener mListener;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private List<User> userList;
+    private List<String> friendsList;
+    private User currentUser;
+    AddNewFriendsAdapter addNewFriendsAdapter;
+    LinearLayoutManager layoutManager;
 
     public AddNewFriendFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Toast.makeText(this.getContext(), "Add new Fragment called", Toast.LENGTH_LONG).show();
-        return inflater.inflate(R.layout.fragment_add_new_friend, container, false);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        Toast.makeText(this.getContext(), "Add New Friend Fragment called", Toast.LENGTH_LONG).show();
+        View view = inflater.inflate(R.layout.fragment_add_new_friend, container, false);
+
+        userList = mListener.getAddFriendUserList();
+
+        addNewFriendsAdapter = new AddNewFriendsAdapter(getActivity(), userList, this);
+
+        RecyclerView rvAddFriends = ((RecyclerView)view.findViewById(R.id.rv_addNewFriend));
+        rvAddFriends.setAdapter(addNewFriendsAdapter);
+        layoutManager = new LinearLayoutManager(getActivity());
+        rvAddFriends.setLayoutManager(layoutManager);
+        addNewFriendsAdapter.notifyDataSetChanged();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -57,18 +78,24 @@ public class AddNewFriendFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void friendRequestSent(User user) {
+        String myId = firebaseAuth.getCurrentUser().getUid();
+        String userId = user.getUser_id();
+        firebaseDatabase.getReference().child("users").child(myId).child("friends").child("pending").child(userId).setValue("s");
+        firebaseDatabase.getReference().child("users").child(userId).child("friends").child("pending").child(myId).setValue("d");
+        userList.remove(user);
+        addNewFriendsAdapter.notifyDataSetChanged();
+        Toast.makeText(getContext(), "Friend request sent", Toast.LENGTH_LONG).show();
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        ArrayList<User> getAddFriendUserList();
+    }
+
+    interface IActivity {
+        ArrayList<User> getUserList();
     }
 }

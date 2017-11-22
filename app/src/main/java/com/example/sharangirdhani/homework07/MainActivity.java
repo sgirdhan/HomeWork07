@@ -3,6 +3,7 @@ package com.example.sharangirdhani.homework07;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.custom_actionbar_login);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
         buttonLogin = (Button) findViewById(R.id.buttonMainLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,SignupActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -162,6 +170,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
+                        User currentUser = dataSnapshot.getValue(User.class);
+
+                        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(currentUser.getFirstName() + " " + currentUser.getLastName())
+                                .build();
+
+                        FirebaseAuth.getInstance().getCurrentUser().updateProfile(changeRequest);
                         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);

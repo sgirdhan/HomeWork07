@@ -1,8 +1,8 @@
 package com.example.sharangirdhani.homework07;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by sharangirdhani on 11/20/17.
@@ -16,8 +16,8 @@ public class User implements Serializable {
     private String password;
     private Date dob;
 
-    public ArrayList<Post> posts;
-    public ArrayList<User> friends;
+    public HashMap<String, Post> postMap = new HashMap<>();
+    public HashMap<String, HashMap<String, String>> friends = new HashMap<>();
 
     public User() {}
 
@@ -28,9 +28,6 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.dob = dob;
-
-        this.posts = new ArrayList<>();
-        this.friends = new ArrayList<>();
     }
 
     public String getUser_id() {
@@ -80,4 +77,6 @@ public class User implements Serializable {
     public void setDob(Date dob) {
         this.dob = dob;
     }
+
+    public String getFullName() { return firstName + " " + lastName; }
 }

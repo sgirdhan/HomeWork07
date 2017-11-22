@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sharangirdhani.homework07.MyProfileActivity">
+
+    <EditText
+        android:id="@+id/editSignupFirstName"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editSignupLastName"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/editSignupFirstName"
+        android:layout_alignStart="@+id/editSignupFirstName" />
+
+    <EditText
+        android:id="@+id/editSignupEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editSignupLastName"
+        android:layout_alignStart="@+id/editSignupLastName"
+        android:layout_below="@+id/editSignupLastName"
+        android:layout_marginTop="11dp"
+        android:ems="10"
+        android:hint="@string/hintEmail"
+        android:inputType="textEmailAddress" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editSignupEmail"
+        android:layout_alignStart="@+id/editSignupEmail"
+        android:layout_alignEnd="@+id/editSignupEmail"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:id="@+id/editTextDOB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Date of Birth"
+            android:inputType="date" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonChooseDate"
+            android:src="@android:drawable/ic_menu_today" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/linearLayout"
+        android:layout_marginBottom="29dp"
+        android:onClick="onClickUpdate"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_alignBaseline="@+id/buttonLogin"
+        android:layout_alignBottom="@+id/buttonLogin"
+        android:layout_alignEnd="@+id/linearLayout" />
+
+</RelativeLayout>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/tv_friendName"
@@ -17,25 +19,25 @@
         android:textStyle="bold" />
 
     <ImageButton
-        android:id="@+id/imgBtnAccept"
+        android:id="@+id/imgBtnDelete"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/accept"
+        android:layout_alignBottom="@+id/tv_friendName"
         android:layout_alignTop="@+id/tv_friendName"
         android:layout_toStartOf="@+id/imgBtnDecline"
-        android:layout_alignBottom="@+id/tv_friendName" />
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/accept" />
 
     <ImageButton
         android:id="@+id/imgBtnDecline"
         android:layout_width="30dp"
         android:layout_height="50dp"
+        android:layout_alignBottom="@+id/imgBtnDelete"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/imgBtnDelete"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/decline"
-        android:layout_alignTop="@+id/imgBtnAccept"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/imgBtnAccept" />
+        app:srcCompat="@drawable/decline" />
 
 </RelativeLayout>

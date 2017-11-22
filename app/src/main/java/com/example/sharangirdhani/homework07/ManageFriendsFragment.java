@@ -4,10 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -16,9 +24,15 @@ import android.widget.Toast;
  * {@link ManageFriendsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ManageFriendsFragment extends Fragment {
+public class ManageFriendsFragment extends Fragment implements ManageFriendsAdapter.IManageFriendsInterface{
 
     private OnFragmentInteractionListener mListener;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private List<User> userList;
+    private User currentUser;
+    ManageFriendsAdapter manageFriendsAdapter;
+    LinearLayoutManager layoutManager;
 
     public ManageFriendsFragment() {
         // Required empty public constructor
@@ -28,9 +42,23 @@ public class ManageFriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
         // Inflate the layout for this fragment
         Toast.makeText(this.getContext(), "Manage Friend Fragment called", Toast.LENGTH_LONG).show();
-        return inflater.inflate(R.layout.fragment_manage_friends, container, false);
+        View view = inflater.inflate(R.layout.fragment_manage_friends, container, false);
+
+        userList = mListener.getManageFriendsList();
+
+        manageFriendsAdapter = new ManageFriendsAdapter(getActivity(), userList, this);
+
+        RecyclerView rvManageFriends = ((RecyclerView)view.findViewById(R.id.rv_friends));
+        rvManageFriends.setAdapter(manageFriendsAdapter);
+        layoutManager = new LinearLayoutManager(getActivity());
+        rvManageFriends.setLayoutManager(layoutManager);
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -57,6 +85,17 @@ public class ManageFriendsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void friendDeleted(User user) {
+        String myId = firebaseAuth.getCurrentUser().getUid();
+        String userId = user.getUser_id();
+        firebaseDatabase.getReference().child("users").child(myId).child("friends").child("accepted").child(userId).setValue(null);
+        firebaseDatabase.getReference().child("users").child(userId).child("friends").child("accepted").child(myId).setValue(null);
+        userList.remove(user);
+        manageFriendsAdapter.notifyDataSetChanged();
+        Toast.makeText(getContext(), "Friend removed", Toast.LENGTH_LONG).show();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -70,5 +109,6 @@ public class ManageFriendsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        ArrayList<User> getManageFriendsList();
     }
 }
