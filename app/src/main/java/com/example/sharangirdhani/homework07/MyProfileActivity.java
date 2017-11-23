@@ -1,3 +1,10 @@
+/*
+    Salman Mujtaba 800969897
+    Sharan Girdhani 800960333
+    My Social App
+    Homework 7
+ */
+
 package com.example.sharangirdhani.homework07;
 
 import android.app.DatePickerDialog;
@@ -155,16 +162,33 @@ public class MyProfileActivity extends AppCompatActivity implements DatePickerDi
         }
 
         if (isValid) {
-            firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("firstName").setValue(firstName);
-            firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("lastName").setValue(lastName);
-            firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("dob").setValue(chosenDate);
-            firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("fullName").setValue(firstName + " " + lastName);
+            final String user_id = firebaseAuth.getCurrentUser().getUid();
+            firebaseDatabase.getReference().child("users").child(user_id).child("firstName").setValue(firstName);
+            firebaseDatabase.getReference().child("users").child(user_id).child("lastName").setValue(lastName);
+            firebaseDatabase.getReference().child("users").child(user_id).child("dob").setValue(chosenDate);
+            firebaseDatabase.getReference().child("users").child(user_id).child("fullName").setValue(firstName + " " + lastName);
 
-            UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
+            final UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
                     .setDisplayName(firstName + " " + lastName)
                     .build();
             firebaseAuth.getCurrentUser().updateProfile(changeRequest);
 
+            firebaseDatabase.getReference().child("users").child(user_id).child("posts").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot child: dataSnapshot.getChildren()){
+                        //fetch all the users
+                        Post post = child.getValue(Post.class);
+                        post.setUsername(firstName + " " + lastName);
+                        firebaseDatabase.getReference().child("users").child(user_id).child("posts").child(post.getPostId()).setValue(post);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             Toast.makeText(this, "Update Successful", Toast.LENGTH_LONG).show();
 
             Intent intent = new Intent(MyProfileActivity.this, HomeActivity.class);

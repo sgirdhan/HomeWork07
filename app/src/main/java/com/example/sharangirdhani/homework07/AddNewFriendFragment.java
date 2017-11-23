@@ -1,3 +1,9 @@
+/*
+    Salman Mujtaba 800969897
+    Sharan Girdhani 800960333
+    My Social App
+    Homework 7
+ */
 package com.example.sharangirdhani.homework07;
 
 import android.content.Context;
